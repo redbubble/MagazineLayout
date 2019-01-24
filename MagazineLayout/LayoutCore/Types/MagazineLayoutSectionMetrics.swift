@@ -17,66 +17,75 @@ import UIKit
 
 /// Encapsulates all layout-affecting metrics relating to a section
 struct MagazineLayoutSectionMetrics: Equatable {
+    // MARK: Lifecycle
 
-  // MARK: Lifecycle
-
-  init(
-    forSectionAtIndex sectionIndex: Int,
-    in collectionView: UICollectionView,
-    layout: UICollectionViewLayout,
-    delegate: UICollectionViewDelegateMagazineLayout)
-  {
-    if #available(iOS 11.0, *) {
-      width = collectionView.bounds.width -
-        collectionView.adjustedContentInset.left -
-        collectionView.adjustedContentInset.right
-    } else {
-      width = collectionView.bounds.width -
-        collectionView.contentInset.left -
-        collectionView.contentInset.right
+    init(
+        forSectionAtIndex sectionIndex: Int,
+        in collectionView: UICollectionView,
+        layout: UICollectionViewLayout,
+        delegate: UICollectionViewDelegateMagazineLayout
+    ) {
+        if #available(iOS 11.0, *) {
+            width = collectionView.bounds.width -
+                collectionView.adjustedContentInset.left -
+                collectionView.adjustedContentInset.right
+        } else {
+            width = collectionView.bounds.width -
+                collectionView.contentInset.left -
+                collectionView.contentInset.right
+        }
+        verticalSpacing = delegate.collectionView(
+            collectionView,
+            layout: layout,
+            verticalSpacingForElementsInSectionAtIndex: sectionIndex
+        )
+        horizontalSpacing = delegate.collectionView(
+            collectionView,
+            layout: layout,
+            horizontalSpacingForItemsInSectionAtIndex: sectionIndex
+        )
+        itemInsets = delegate.collectionView(
+            collectionView,
+            layout: layout,
+            insetsForItemsInSectionAtIndex: sectionIndex
+        )
+        isWaterfallLayout = delegate.collectionView(collectionView,
+                                                    layout: layout,
+                                                    isWaterfallForItemsInSectionAt: sectionIndex)
     }
-    verticalSpacing = delegate.collectionView(
-      collectionView,
-      layout: layout,
-      verticalSpacingForElementsInSectionAtIndex: sectionIndex)
-    horizontalSpacing = delegate.collectionView(
-      collectionView,
-      layout: layout,
-      horizontalSpacingForItemsInSectionAtIndex: sectionIndex)
-    itemInsets = delegate.collectionView(
-      collectionView,
-      layout: layout,
-      insetsForItemsInSectionAtIndex: sectionIndex)
-  }
 
-  private init(
-    width: CGFloat,
-    verticalSpacing: CGFloat,
-    horizontalSpacing: CGFloat,
-    itemInsets: UIEdgeInsets)
-  {
-    self.width = width
-    self.verticalSpacing = verticalSpacing
-    self.horizontalSpacing = horizontalSpacing
-    self.itemInsets = itemInsets
-  }
+    private init(
+        width: CGFloat,
+        verticalSpacing: CGFloat,
+        horizontalSpacing: CGFloat,
+        itemInsets: UIEdgeInsets,
+        isWaterfallLayout: Bool
+    ) {
+        self.width = width
+        self.verticalSpacing = verticalSpacing
+        self.horizontalSpacing = horizontalSpacing
+        self.itemInsets = itemInsets
+        self.isWaterfallLayout = isWaterfallLayout
+    }
 
-  // MARK: Internal
+    // MARK: Internal
 
-  var width: CGFloat
-  var verticalSpacing: CGFloat
-  var horizontalSpacing: CGFloat
-  var itemInsets: UIEdgeInsets
+    var width: CGFloat
+    var verticalSpacing: CGFloat
+    var horizontalSpacing: CGFloat
+    var itemInsets: UIEdgeInsets
+    var isWaterfallLayout: Bool
 
-  static func defaultSectionMetrics(
-    forCollectionViewWidth width: CGFloat)
-    -> MagazineLayoutSectionMetrics
-  {
-    return MagazineLayoutSectionMetrics(
-      width: width,
-      verticalSpacing: MagazineLayout.Default.VerticalSpacing,
-      horizontalSpacing: MagazineLayout.Default.HorizontalSpacing,
-      itemInsets: MagazineLayout.Default.ItemInsets)
-  }
-
+    static func defaultSectionMetrics(
+        forCollectionViewWidth width: CGFloat
+    )
+        -> MagazineLayoutSectionMetrics {
+        return MagazineLayoutSectionMetrics(
+            width: width,
+            verticalSpacing: MagazineLayout.Default.VerticalSpacing,
+            horizontalSpacing: MagazineLayout.Default.HorizontalSpacing,
+            itemInsets: MagazineLayout.Default.ItemInsets,
+            isWaterfallLayout: false
+        )
+    }
 }

@@ -100,5 +100,10 @@ public protocol UICollectionViewDelegateMagazineLayout: UICollectionViewDelegate
     layout collectionViewLayout: UICollectionViewLayout,
     insetsForItemsInSectionAtIndex index: Int)
     -> UIEdgeInsets
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        isWaterfallForItemsInSectionAt index: Int) -> Bool
 
 }

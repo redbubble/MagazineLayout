@@ -111,7 +111,7 @@ final class ViewController: UIViewController {
           sizeMode: MagazineLayoutItemSizeMode(
             widthMode: .halfWidth,
             heightMode: .dynamic),
-          text: "based on their contents.",
+          text: "based on their contents. Blah blah blah blah blah",
           color: Colors.orange),
         ItemInfo(
           sizeMode: MagazineLayoutItemSizeMode(
@@ -123,23 +123,17 @@ final class ViewController: UIViewController {
           sizeMode: MagazineLayoutItemSizeMode(
             widthMode: .halfWidth,
             heightMode: .dynamic),
-          text: "by item width modes",
+          text: "by item width modes based on their contents. Blah blah blah blah blah based on their contents. Blah blah blah blah blah",
           color: Colors.green),
         ItemInfo(
           sizeMode: MagazineLayoutItemSizeMode(
-            widthMode: .thirdWidth,
+            widthMode: .halfWidth,
             heightMode: .dynamic),
           text: "3 across",
           color: Colors.green),
         ItemInfo(
           sizeMode: MagazineLayoutItemSizeMode(
-            widthMode: .thirdWidth,
-            heightMode: .dynamic),
-          text: "3 across",
-          color: Colors.green),
-        ItemInfo(
-          sizeMode: MagazineLayoutItemSizeMode(
-            widthMode: .thirdWidth,
+            widthMode: .halfWidth,
             heightMode: .dynamic),
           text: "3 across",
           color: Colors.green),
@@ -212,19 +206,19 @@ final class ViewController: UIViewController {
       itemInfos: [
         ItemInfo(
           sizeMode: MagazineLayoutItemSizeMode(
-            widthMode: .fullWidth(respectsHorizontalInsets: true),
+            widthMode: .halfWidth,
             heightMode: .dynamic),
           text: "If you really want to turn off self-sizing for a particular item...",
           color: Colors.red),
         ItemInfo(
           sizeMode: MagazineLayoutItemSizeMode(
-            widthMode: .fullWidth(respectsHorizontalInsets: true),
-            heightMode: .static(height: 200)),
+            widthMode: .halfWidth,
+            heightMode: .dynamic),
           text: "you can, but any dynamic content could get truncated or have too much padding.",
           color: Colors.red),
         ItemInfo(
           sizeMode: MagazineLayoutItemSizeMode(
-            widthMode: .fullWidth(respectsHorizontalInsets: true),
+            widthMode: .halfWidth,
             heightMode: .dynamic),
           text: "You can also ask items to size dynamically first, but ultimately stretch to match the tallest item in the same row of items.",
           color: Colors.orange),
@@ -237,7 +231,7 @@ final class ViewController: UIViewController {
         ItemInfo(
           sizeMode: MagazineLayoutItemSizeMode(
             widthMode: .halfWidth,
-            heightMode: .dynamicAndStretchToTallestItemInRow),
+            heightMode: .dynamic),
           text: "and I'll match your height!",
           color: Colors.orange),
       ])
@@ -397,59 +391,68 @@ extension ViewController: UICollectionViewDelegate {
 // MARK: UICollectionViewDelegateMagazineLayout
 
 extension ViewController: UICollectionViewDelegateMagazineLayout {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        isWaterfallForItemsInSectionAt index: Int) -> Bool {
+        if index < 2 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
 
-  func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    sizeModeForItemAt indexPath: IndexPath)
+  func collectionView(_ collectionView: UICollectionView,
+                      layout collectionViewLayout: UICollectionViewLayout,
+                      sizeModeForItemAt indexPath: IndexPath)
     -> MagazineLayoutItemSizeMode
   {
-    return dataSource.sectionInfos[indexPath.section].itemInfos[indexPath.item].sizeMode
+    let sizeMode = dataSource.sectionInfos[indexPath.section].itemInfos[indexPath.item].sizeMode
+    if indexPath.section < 2 {
+        return MagazineLayoutItemSizeMode(widthMode: .halfWidth, heightMode: sizeMode.heightMode)
+    } else {
+        return sizeMode
+    }
   }
 
-  func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    visibilityModeForHeaderInSectionAtIndex index: Int)
+  func collectionView(_ collectionView: UICollectionView,
+                      layout collectionViewLayout: UICollectionViewLayout,
+                      visibilityModeForHeaderInSectionAtIndex index: Int)
     -> MagazineLayoutHeaderVisibilityMode
   {
     return dataSource.sectionInfos[index].headerInfo.visibilityMode
-  }
-
-  func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    visibilityModeForBackgroundInSectionAtIndex index: Int)
-    -> MagazineLayoutBackgroundVisibilityMode
-  {
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        visibilityModeForBackgroundInSectionAtIndex index: Int)
+        -> MagazineLayoutBackgroundVisibilityMode
+    {
     return .hidden
   }
-
-  func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    horizontalSpacingForItemsInSectionAtIndex index: Int)
-    -> CGFloat
-  {
-    return 12
-  }
-
-  func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    verticalSpacingForElementsInSectionAtIndex index: Int)
-    -> CGFloat
-  {
-    return 12
-  }
-
-  func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    insetsForItemsInSectionAtIndex index: Int)
-    -> UIEdgeInsets
-  {
-    return UIEdgeInsets(top: 24, left: 0, bottom: 24, right: 0)
-  }
-
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        horizontalSpacingForItemsInSectionAtIndex index: Int)
+        -> CGFloat
+    {
+        return 12
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        verticalSpacingForElementsInSectionAtIndex index: Int)
+        -> CGFloat
+    {
+        return 12
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetsForItemsInSectionAtIndex index: Int)
+        -> UIEdgeInsets
+    {
+        return UIEdgeInsets(top: 24, left: 0, bottom: 24, right: 0)
+    }
+    
 }

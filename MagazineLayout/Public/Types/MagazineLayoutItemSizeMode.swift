@@ -109,6 +109,15 @@ extension MagazineLayoutItemWidthMode: Equatable {
 
 }
 
+extension MagazineLayoutItemWidthMode {
+    var numberOfItemsInRow: Int {
+        switch self {
+        case .fullWidth: return 1
+        case .fractionalWidth(let divisor): return Int(divisor)
+        }
+    }
+}
+
 // MARK: - MagazineLayoutItemHeightMode
 
 /// Represents the vertical sizing mode for an item.

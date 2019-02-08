@@ -318,18 +318,8 @@ public final class MagazineLayout: UICollectionViewLayout {
         guard let layoutAttributes = itemLayoutAttributes[itemLocation] else {
             continue
         }
-        
-        var movedItemFrame = itemFrame
-        let sectionMetric = metricsForSection(atIndex: itemLocation.sectionIndex)
-        if sectionMetric.isWaterfallLayout && itemLocation.elementIndex >= 2 {
-            let newY = previousFrameOfCellInColumn(itemLocation, numberOfColumns: 2)
-            let padding = sectionMetric.verticalSpacing
-            movedItemFrame = CGRect(x: itemFrame.origin.x,
-                                    y: newY.origin.y + newY.size.height + padding,
-                                    width: itemFrame.size.width,
-                                    height: itemFrame.size.height)
-        }
-        layoutAttributes.frame = movedItemFrame
+
+        layoutAttributes.frame = itemFrame
         layoutAttributesInRect.append(layoutAttributes)
     }
 
